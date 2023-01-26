@@ -1,8 +1,8 @@
 import styled from "styled-components";
 
-const Modal = (props) => {
+const Signup = () => {
   return (
-    <Wrapper>{props.children}</Wrapper>
+    <Wrapper>Signup</Wrapper>
   )
 };
 
@@ -11,4 +11,4 @@ const Wrapper = styled.div`
   width: 100%;
 `;
 
-export default Modal;
+export default Signup;

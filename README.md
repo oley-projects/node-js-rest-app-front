@@ -1,3 +1,3 @@
 # React, Node.js, Express.js.
 
-This project using react library and node.js runtime environment.
+This project use react library and node.js runtime environment.
