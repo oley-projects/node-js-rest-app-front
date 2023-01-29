@@ -2,7 +2,6 @@ import { useState, useRef } from "react";
 
 import Modal from "./Modal";
 import Input from "./Input";
-import ButtonEl from './ButtonEl';
 import useOnClickOutside from "../hooks/useOnClickOutside";
 import { generateBase64FromImage } from '../utils/image'
 import { required, length } from '../utils/validators'
@@ -32,7 +31,6 @@ const FeedEdit = (props) => {
     },
     imagePreview: null
   });
-  console.log(state);
   const ref = useRef();
   useOnClickOutside(ref, props.closeModal);
 
@@ -46,7 +44,22 @@ const FeedEdit = (props) => {
           setState({...state, imagePreview: null });
         });
     }
-    setState({...state, ...state.postForm, [input]: {...state.postForm[input], value: files ? files[0] : value} });
+    setState((prevState) => {
+      const updatedForm = {
+        ...prevState.postForm,
+        [input] : {...prevState.postForm[input], value: files ? files[0] : value}
+      };
+      return {...state, postForm: updatedForm}
+    });
+  };
+
+  const acceptEditPostHandler = () => {
+    const post = {
+      title: state.postForm.title.value,
+      image: state.postForm.image.value,
+      content: state.postForm.content.value
+    }
+    props.finishEditHandler(post);
   };
 
   /*const inputBlurHandler = (input) => {
@@ -57,16 +70,17 @@ const FeedEdit = (props) => {
     <>
       <Wrapper />
       <ModalWrap ref={ref}>
-        <Modal>
-          <h2>NewPost</h2>
-          <hr />
+        <Modal title={'New Post'} acceptEditPostHandler={acceptEditPostHandler}>
           <form>
             <Input element='input' label='title' id='title' required={true} inputChangeHandler={inputChangeHandler} />
             <Input element='file' label='Image' id='image' inputChangeHandler={inputChangeHandler} />
+            <Image>
+              {!state.imagePreview && (<p>Please choose an image.</p>)}
+              {state.imagePreview && (
+                <img src={state.imagePreview} alt='state.title.value' />
+              )}
+            </Image>
             <Input element='textarea' label='content' id='content' required={true} inputChangeHandler={inputChangeHandler} />
-            <div className="right">
-              <ButtonEl name={'Apply'} />
-            </div>
           </form>
         </Modal>
       </ModalWrap>
@@ -75,7 +89,7 @@ const FeedEdit = (props) => {
 };
 
 const Wrapper = styled.div`
-  position: absolute;
+  position: fixed;
   top: 0;
   left: 0;
   width: 100vw;
@@ -91,6 +105,17 @@ const ModalWrap = styled.div`
   top: 50% ;
   left: 50%;
   transform: translate(-50%, -50%);
+`;
+const Image = styled.div`
+  margin: -0.9rem 0 1.5rem 0;
+  p {
+    font-size: 0.8em;
+    color: #999;
+  }
+  img {
+    width: 3rem;
+    border-radius: 0.3rem;
+  }
 `;
 
 export default FeedEdit;

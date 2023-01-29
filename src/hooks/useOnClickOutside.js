@@ -1,6 +1,5 @@
 import { useEffect } from 'react';
 
-
 export default function useOnClickOutside(ref, handler) {
   useEffect(
     () => {
@@ -10,10 +9,10 @@ export default function useOnClickOutside(ref, handler) {
         }
         handler(event);
       };
-      document.addEventListener("mouseup", listener);
+      document.addEventListener("mousedown", listener);
       document.addEventListener("touchstart", listener);
       return () => {
-        document.removeEventListener("mouseup", listener);
+        document.removeEventListener("mousedown", listener);
         document.removeEventListener("touchstart", listener);
       };
     },

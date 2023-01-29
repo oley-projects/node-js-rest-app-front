@@ -2,15 +2,15 @@ import { createGlobalStyle } from "styled-components";
 
 const GlobalStyle = createGlobalStyle`
   * {
-    box-sizing: border-box;
     margin: 0;
+    padding: 0;
+    box-sizing: border-box;
   }
 
   body {
     font-family: sans-serif;
     color: #777;
-    font-size: 1rem;
-    line-height: 1rem;
+    font-size: 1.3rem;
   }
 
   ul {
@@ -26,7 +26,7 @@ const GlobalStyle = createGlobalStyle`
     transition: all 0.2s;
     outline: none;
     border: 0;
-    font-size: 1rem;
+    font-size: 1.3rem;
     line-height: 1rem;
     cursor: pointer;
     &:hover, &:active {
@@ -34,23 +34,25 @@ const GlobalStyle = createGlobalStyle`
       background: #aaa2a1;
     }
   }
+
   input, textarea {
-    padding: 1rem;
+    padding: 0.75rem 1rem;
+    width: 100%;
     outline: none;
     border: 0.1rem solid rgb(239, 239, 239);
     // border-top-left-radius: 0.5rem;
     // border-bottom-left-radius: 0.5rem;
-    font-size: 1rem;
+    font-size: 1.3rem;
     line-height: 1rem;
     color: #888;
-    &:focus {
-      border-color: rgb(222, 222, 222);
+    &:focus, &:active {
+      border-color: rgba(0, 0, 0, 0.2);
     }
   }
 
   textarea {
     resize: vertical;
-    min-height: 1.5rem;
+    min-height: 2.7rem;
     max-height: 12rem;
     height: 7rem;
   }
@@ -74,13 +76,19 @@ const GlobalStyle = createGlobalStyle`
   .margin-left {
     margin-left: 0.5rem;
   }
+
   .center {
     display: flex;
     justify-content: center;
   }
+  
   .right {
     display: flex;
     justify-content: right;
+  }
+
+  .overflow-hidden {
+    overflow: hidden;
   }
 `;
 

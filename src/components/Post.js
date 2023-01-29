@@ -5,8 +5,8 @@ const Post = (props) => {
   return (
     <Wrapper>
       <header>
-        <h3>Posted by {props.author} at {props.date}</h3>
-        <h1>{props.title}</h1>
+        <h4>Posted by {props.author} at {props.date}</h4>
+        <h2>{props.title}</h2>
       </header>
       <div>
         <ButtonEl name={'View'} />
@@ -18,10 +18,10 @@ const Post = (props) => {
 };
 
 const Wrapper = styled.div`
+  margin-bottom: 2rem;
   padding: 1.5rem 3rem;
-  display: inline-block;
-  border: 0.1rem solid rgb(239, 239, 239);
-  box-shadow: 0 0 0.5rem rgb(239, 239, 239);
+  box-shadow: 0 0 0.5rem rgba(55, 55, 55, 0.15);
+  background-color: rgba(255, 255, 222, 0.8);
   border-radius: 0.5rem;
   h1 {
     margin-top: 1rem;
