@@ -87,6 +87,7 @@ const Feed = () => {
             finishEditHandler={finishEditHandler}
             loading={state.editLoading}
             closeModal={closeModal}
+            isEditing={state.isEditing}
           />
         )}
         <div>

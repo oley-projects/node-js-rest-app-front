@@ -8,31 +8,43 @@ import { required, length } from '../utils/validators'
 import styled from "styled-components";
 
 const FeedEdit = (props) => {
-  const [state, setState] = useState({
-    postForm: {
-      title: {
-        value: '',
-        valid: false,
-        touched: false,
-        validators: [required, length({ min: 5 })]
-      },
-      image: {
-        value: '',
-        valid: false,
-        touched: false,
-        validators: [required]
-      },
-      content: {
-        value: '',
-        valid: false,
-        touched: false,
-        validators: [required, length({ min: 5 })]
-      }
+  const POST_FORM = {
+    title: {
+      value: '',
+      valid: false,
+      touched: false,
+      validators: [required, length({ min: 5 })]
     },
+    image: {
+      value: '',
+      valid: false,
+      touched: false,
+      validators: [required]
+    },
+    content: {
+      value: '',
+      valid: false,
+      touched: false,
+      validators: [required, length({ min: 5 })]
+    }
+  };
+
+  const [state, setState] = useState({
+    postForm: POST_FORM,
+    formIsValid: false,
     imagePreview: null
   });
+  
   const ref = useRef();
   useOnClickOutside(ref, props.closeModal);
+
+  /* useEffect(() => {
+    setState((prevState) => {
+      if (props.isEditing) {
+
+      }
+    });
+  }, []); */
 
   const inputChangeHandler = (input, value, files) => {
     if (files) {
@@ -53,6 +65,15 @@ const FeedEdit = (props) => {
     });
   };
 
+  const inputCancelHandler = () => {
+    setState({
+      postForm: POST_FORM,
+      formIsValid: false,
+      imagePreview: null
+    });
+    props.closeModal();
+  };
+
   const acceptEditPostHandler = () => {
     const post = {
       title: state.postForm.title.value,
@@ -62,25 +83,38 @@ const FeedEdit = (props) => {
     props.finishEditHandler(post);
   };
 
-  /*const inputBlurHandler = (input) => {
-    setState(...state, state.postForm);
-  }*/
+  const inputBlurHandler = (input) => {
+    setState((prevState) => {
+      const updatedForm = {
+        ...prevState.postForm,
+        [input]: {
+          ...prevState.postForm[input], 
+          touched: true
+        }
+      }
+      return {...state, postForm: updatedForm}
+    });
+  }
 
   return (
     <>
       <Wrapper />
       <ModalWrap ref={ref}>
-        <Modal title={'New Post'} acceptEditPostHandler={acceptEditPostHandler}>
+        <Modal
+          title={'New Post'}
+          acceptEditPostHandler={acceptEditPostHandler}
+          inputCancelHandler={inputCancelHandler}
+        >
           <form>
-            <Input element='input' label='title' id='title' required={true} inputChangeHandler={inputChangeHandler} />
-            <Input element='file' label='Image' id='image' inputChangeHandler={inputChangeHandler} />
+            <Input element='input' id='title' required={true} inputChangeHandler={inputChangeHandler} inputBlurHandler={inputBlurHandler} />
+            <Input element='file' id='image' inputChangeHandler={inputChangeHandler} inputBlurHandler={inputBlurHandler} />
             <Image>
-              {!state.imagePreview && (<p>Please choose an image.</p>)}
-              {state.imagePreview && (
-                <img src={state.imagePreview} alt='state.title.value' />
+              {!state?.imagePreview && (<p>Please choose an image.</p>)}
+              {state?.imagePreview && (
+                <img src={state?.imagePreview} alt='state.title.value' />
               )}
             </Image>
-            <Input element='textarea' label='content' id='content' required={true} inputChangeHandler={inputChangeHandler} />
+            <Input element='textarea' id='content' required={true} inputChangeHandler={inputChangeHandler} inputBlurHandler={inputBlurHandler} />
           </form>
         </Modal>
       </ModalWrap>
