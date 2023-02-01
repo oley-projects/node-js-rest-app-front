@@ -10,7 +10,9 @@ const Post = (props) => {
       </header>
       <div>
         <ButtonEl name={'View'} />
-        <ButtonEl marginLeft={true} name={'Edit'} />
+        <span onClick={() => props.startEditHandler(props.id)} >
+          <ButtonEl marginLeft={true} name={'Edit'} />
+        </span>
         <ButtonEl marginLeft={true} name={'Delete'} />
       </div>
     </Wrapper>

@@ -10,10 +10,14 @@ const Feed = () => {
   const [state, setState] = useState({
     isEditing: false,
     posts: [],
+    totalPosts: 0,
     editPost: null,
+    status: '',
+    postPage: 1,
     postsLoading: true,
     editLoading: false
   });
+
   useEffect(() => {
     const loadPosts = async () => {
       try {
@@ -40,15 +44,26 @@ const Feed = () => {
     setState({...state, isEditing: true});
   };
 
-  const closeModal = () => {
-    setState({...state, isEditing: false});
+  const cancelEditHandler = () => {
+    setState({...state, isEditing: false, editPost: null});
+  };
+
+  const startEditHandler = (postId) => {
+    setState((prevState) => {
+      const loadedPost = { ...prevState.posts.find(p => p._id === postId) };
+
+      return {
+        ...prevState,
+        isEditing: true,
+        editPost: loadedPost
+      };
+    });
   };
 
   const finishEditHandler = async (postData) => {
     setState({...state, editLoading: true});
     let url = 'http://localhost:8080/feed/post';
     let method= 'POST';
-
     try {
       const res = await fetch(url, {
         method,
@@ -61,13 +76,40 @@ const Feed = () => {
         })
       });
       if (res.status !== 200 && res.status !== 201) {
-        throw new Error('Creating or editing a post failed!');
+        const text = await res.text();
+        const { message } = JSON.parse(text);
+        throw new Error(message);
       }
-      const data = await res.json();
-      const newPostData = data.post;
-      setState({...state, isEditing: false, posts: [...state.posts, newPostData]});
+      const { post } = await res.json();
+
+      setState( (prevState) => { 
+        let updatedPosts = [...prevState.posts];
+        if (prevState.editPost) {
+          const postIndex = prevState.posts.findIndex(
+            (p) => p._id === prevState.editPost._id
+          );
+          updatedPosts[postIndex] = post;
+        } else if (prevState.posts.length <= 1) {
+          updatedPosts = prevState.posts.concat(post);
+        } else {
+          updatedPosts = [...updatedPosts, post];
+        }
+        return {
+          ...prevState,
+          isEditing: false,
+          editPost: null,
+          editLoading: false,
+          posts: updatedPosts
+        }
+      });
     } catch (error) {
-      console.log(error);
+      setState({
+        ...state,
+        isEditing: false,
+        editPost: null,
+        editLoading: false,
+        status: error.message
+      });
     }
   };
 
@@ -84,10 +126,11 @@ const Feed = () => {
         {state.postsLoading && <Loading />}
         {state.isEditing && (
           <FeedEdit
-            finishEditHandler={finishEditHandler}
-            loading={state.editLoading}
-            closeModal={closeModal}
             isEditing={state.isEditing}
+            selectedPost={state.editPost}
+            loading={state.editLoading}
+            finishEditHandler={finishEditHandler}
+            cancelEditHandler={cancelEditHandler}
           />
         )}
         <div>
@@ -98,6 +141,7 @@ const Feed = () => {
             title={post.title}
             author={post.creator.name}
             date={new Date(post.createdAt).toLocaleDateString()}
+            startEditHandler={startEditHandler}
           />
         ))}
         </div>

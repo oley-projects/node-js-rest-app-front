@@ -1,4 +1,4 @@
-import { useState, useRef } from "react";
+import { useState, useRef, useEffect } from "react";
 
 import Modal from "./Modal";
 import Input from "./Input";
@@ -36,15 +36,35 @@ const FeedEdit = (props) => {
   });
   
   const ref = useRef();
-  useOnClickOutside(ref, props.closeModal);
-
-  /* useEffect(() => {
-    setState((prevState) => {
-      if (props.isEditing) {
-
-      }
-    });
-  }, []); */
+  useOnClickOutside(ref, props.cancelEditHandler);
+  console.log(state);
+  useEffect(() => {
+    if (props.isEditing && props.selectedPost) {
+      setState((prevState) => {
+      
+        const postForm = {
+          title: {
+            ...prevState.postForm.title,
+            value: props.selectedPost.title,
+            valid: true
+          },
+          image: {
+            ...prevState.postForm.image,
+            value: props.selectedPost.imagePath,
+            valid: true
+          },
+          content: {
+            ...prevState.postForm.content,
+            value: props.selectedPost.content,
+            valid: true
+          }
+        }
+        return ({...state, postForm, formIsValid: true})
+      
+      });
+    }
+  // eslint-disable-next-line
+  }, [props.selectedPost]);
 
   const inputChangeHandler = (input, value, files) => {
     if (files) {
@@ -71,7 +91,7 @@ const FeedEdit = (props) => {
       formIsValid: false,
       imagePreview: null
     });
-    props.closeModal();
+    props.cancelEditHandler();
   };
 
   const acceptEditPostHandler = () => {
