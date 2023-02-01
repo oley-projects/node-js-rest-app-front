@@ -12,6 +12,7 @@ const Input = (props) => {
           placeholder={props.placeholder}
           onChange={e => props.inputChangeHandler(props.id, e.target.value, e.target.files)} maxLength='40'
           onBlur={() => props.inputBlurHandler(props.id)}
+          value={props.value}
         />
       )}
       {props.element === 'textarea' && (
@@ -21,6 +22,7 @@ const Input = (props) => {
           onChange={e => props.inputChangeHandler(props.id, e.target.value, e.target.files)}
           maxLength='300'
           onBlur={() => props.inputBlurHandler(props.id)}
+          value={props.value}
         />
       )}
       {props.element === 'file' && (

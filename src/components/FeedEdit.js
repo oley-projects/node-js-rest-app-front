@@ -37,7 +37,7 @@ const FeedEdit = (props) => {
   
   const ref = useRef();
   useOnClickOutside(ref, props.cancelEditHandler);
-  console.log(state);
+
   useEffect(() => {
     if (props.isEditing && props.selectedPost) {
       setState((prevState) => {
@@ -64,7 +64,7 @@ const FeedEdit = (props) => {
       });
     }
   // eslint-disable-next-line
-  }, [props.selectedPost]);
+  }, []);
 
   const inputChangeHandler = (input, value, files) => {
     if (files) {
@@ -126,15 +126,34 @@ const FeedEdit = (props) => {
           inputCancelHandler={inputCancelHandler}
         >
           <form>
-            <Input element='input' id='title' required={true} inputChangeHandler={inputChangeHandler} inputBlurHandler={inputBlurHandler} />
-            <Input element='file' id='image' inputChangeHandler={inputChangeHandler} inputBlurHandler={inputBlurHandler} />
+            <Input
+              element='input'
+              id='title'
+              required={true}
+              inputChangeHandler={inputChangeHandler}
+              inputBlurHandler={inputBlurHandler}
+              value={state.postForm.title.value || ''}
+            />
+            <Input
+              element='file'
+              id='image'
+              inputChangeHandler={inputChangeHandler}
+              inputBlurHandler={inputBlurHandler}
+            />
             <Image>
               {!state?.imagePreview && (<p>Please choose an image.</p>)}
               {state?.imagePreview && (
                 <img src={state?.imagePreview} alt='state.title.value' />
               )}
             </Image>
-            <Input element='textarea' id='content' required={true} inputChangeHandler={inputChangeHandler} inputBlurHandler={inputBlurHandler} />
+            <Input
+              element='textarea'
+              id='content'
+              required={true}
+              inputChangeHandler={inputChangeHandler}
+              inputBlurHandler={inputBlurHandler}
+              value={state.postForm.content.value || ''}
+            />
           </form>
         </Modal>
       </ModalWrap>
