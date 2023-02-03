@@ -1,16 +1,25 @@
+import { useRef } from "react";
 import styled from "styled-components";
 
 const Input = (props) => {
+  const fileInput = useRef(null);
+
   return (
     <Wrapper>
-      {props.label && <label htmlFor={props.id}>{props.id}</label>}
+      {props.label && (
+        <label htmlFor={props.id}>
+          {props.id}
+        </label>
+        )}
       {props.element === 'input' && (
         <input
-          type={props.type}
           id={props.id}
+          type={props.type}
+          name={props.id}
+          className={(props.touched && !props.valid) ? 'invalid' : ''}
           required={props.required}
           placeholder={props.placeholder}
-          onChange={e => props.inputChangeHandler(props.id, e.target.value, e.target.files)} maxLength='40'
+          onChange={e => props.inputChangeHandler(props.id, e.target.value, '', '')} maxLength='40'
           onBlur={() => props.inputBlurHandler(props.id)}
           value={props.value}
         />
@@ -18,18 +27,25 @@ const Input = (props) => {
       {props.element === 'textarea' && (
         <textarea
           id={props.id}
+          name={props.id}
           required={props.required}
-          onChange={e => props.inputChangeHandler(props.id, e.target.value, e.target.files)}
+          className={(props.touched && !props.valid) ? 'invalid' : ''}
+          onChange={e => props.inputChangeHandler(props.id, e.target.value, '', '')}
           maxLength='300'
           onBlur={() => props.inputBlurHandler(props.id)}
           value={props.value}
         />
       )}
       {props.element === 'file' && (
-        <input type='file'
+        <input
           id={props.id}
-          onChange={e => props.inputChangeHandler(props.id, e.target.value, e.target.files)}
+          type={props.element}
+          name={props.id}
+          className={(props.touched && !props.valid) ? 'invalid' : ''}
+          onInput={e => props.inputChangeHandler(props.id, e.target.value, e.target.files, fileInput)}
           onBlur={() => props.inputBlurHandler(props.id)}
+          ref={fileInput}
+          defaultValue={props.value}
         />
       )}
     </Wrapper>

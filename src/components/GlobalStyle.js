@@ -40,13 +40,14 @@ const GlobalStyle = createGlobalStyle`
     width: 100%;
     outline: none;
     border: 0.1rem solid rgb(239, 239, 239);
-    // border-top-left-radius: 0.5rem;
-    // border-bottom-left-radius: 0.5rem;
     font-size: 1.3rem;
     line-height: 1rem;
     color: #888;
     &:focus, &:active {
       border-color: rgba(0, 0, 0, 0.2);
+    }
+    &.invalid {
+      border-color: rgba(200, 25, 25, 0.5);
     }
   }
 
@@ -62,6 +63,20 @@ const GlobalStyle = createGlobalStyle`
     border: 0;
     border-top: 1px solid rgba(0, 0, 0, 0.1);
     box-shadow: 0 0 3px rgba(0, 0, 0, 0.2);
+  }
+
+  button {
+    &:disabled,
+    &[disabled] {
+      color: #bbb;
+      cursor: not-allowed;
+      transition: all 0.2s;
+      &:hover, &:active {
+        color: #ccc;
+        background: rgb(239, 239, 239);
+        border-color: rgb(239, 239, 239);
+      }
+    }
   }
 
   .container {

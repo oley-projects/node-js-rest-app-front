@@ -1,13 +1,13 @@
-import styled from "styled-components";
-
 const ButtonEl = (props) => {
+  console.log(props.isFormValid);
+  if (props.isFormValid === false && props.isFormValid !== undefined) {
+    return (
+      <button disabled className={props.marginLeft ? 'margin-left' : ''}>{props.name}</button>
+    ) 
+  }
   return (
-    <Wrapper className={props.marginLeft ? 'margin-left' : ''}>{props.name}</Wrapper>
+    <button className={props.marginLeft ? 'margin-left' : ''}>{props.name}</button>
   )
 };
-
-const Wrapper = styled.button`
-
-`;
 
 export default ButtonEl;

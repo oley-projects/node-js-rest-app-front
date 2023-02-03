@@ -51,7 +51,6 @@ const Feed = () => {
   const startEditHandler = (postId) => {
     setState((prevState) => {
       const loadedPost = { ...prevState.posts.find(p => p._id === postId) };
-
       return {
         ...prevState,
         isEditing: true,

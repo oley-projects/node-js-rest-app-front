@@ -17,7 +17,7 @@ const FeedEdit = (props) => {
     },
     image: {
       value: '',
-      valid: false,
+      valid: true,
       touched: false,
       validators: [required]
     },
@@ -31,17 +31,15 @@ const FeedEdit = (props) => {
 
   const [state, setState] = useState({
     postForm: POST_FORM,
-    formIsValid: false,
+    isFormValid: false,
     imagePreview: null
   });
-  
-  const ref = useRef();
+  const ref = useRef(null);
   useOnClickOutside(ref, props.cancelEditHandler);
 
   useEffect(() => {
     if (props.isEditing && props.selectedPost) {
       setState((prevState) => {
-      
         const postForm = {
           title: {
             ...prevState.postForm.title,
@@ -59,14 +57,13 @@ const FeedEdit = (props) => {
             valid: true
           }
         }
-        return ({...state, postForm, formIsValid: true})
-      
+        return ({...state, postForm, isFormValid: true})
       });
     }
   // eslint-disable-next-line
   }, []);
 
-  const inputChangeHandler = (input, value, files) => {
+  const inputChangeHandler = (input, value, files, fileRef) => {
     if (files) {
       generateBase64FromImage(files[0])
         .then(b64 => {
@@ -77,18 +74,35 @@ const FeedEdit = (props) => {
         });
     }
     setState((prevState) => {
+      let isValid = true;
+      for (const validator of prevState.postForm[input].validators) {
+        isValid = isValid && validator(value);
+      }
+      
       const updatedForm = {
         ...prevState.postForm,
-        [input] : {...prevState.postForm[input], value: files ? files[0] : value}
+        [input] : {
+          ...prevState.postForm[input],
+          valid: isValid,
+          value: files ? fileRef.current.files[0].name : value
+        }
       };
-      return {...state, postForm: updatedForm}
+      let isFormValid = true;
+      for (const inputName in updatedForm) {
+        isFormValid = isFormValid && updatedForm[inputName].valid;
+      }
+      return {
+        ...prevState,
+        postForm: updatedForm,
+        isFormValid
+      }
     });
   };
 
   const inputCancelHandler = () => {
     setState({
       postForm: POST_FORM,
-      formIsValid: false,
+      isFormValid: false,
       imagePreview: null
     });
     props.cancelEditHandler();
@@ -112,6 +126,7 @@ const FeedEdit = (props) => {
           touched: true
         }
       }
+
       return {...state, postForm: updatedForm}
     });
   }
@@ -124,6 +139,7 @@ const FeedEdit = (props) => {
           title={'New Post'}
           acceptEditPostHandler={acceptEditPostHandler}
           inputCancelHandler={inputCancelHandler}
+          isFormValid={state.isFormValid}
         >
           <form>
             <Input
@@ -132,6 +148,8 @@ const FeedEdit = (props) => {
               required={true}
               inputChangeHandler={inputChangeHandler}
               inputBlurHandler={inputBlurHandler}
+              valid={state.postForm.title.valid}
+              touched={state.postForm.title.touched}
               value={state.postForm.title.value || ''}
             />
             <Input
@@ -139,6 +157,9 @@ const FeedEdit = (props) => {
               id='image'
               inputChangeHandler={inputChangeHandler}
               inputBlurHandler={inputBlurHandler}
+              valid={state.postForm.image.valid}
+              touched={state.postForm.image.touched}
+              value={state.postForm.image.value || ''}
             />
             <Image>
               {!state?.imagePreview && (<p>Please choose an image.</p>)}
@@ -152,6 +173,8 @@ const FeedEdit = (props) => {
               required={true}
               inputChangeHandler={inputChangeHandler}
               inputBlurHandler={inputBlurHandler}
+              valid={state.postForm.content.valid}
+              touched={state.postForm.content.touched}
               value={state.postForm.content.value || ''}
             />
           </form>
