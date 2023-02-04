@@ -9,11 +9,11 @@ const Post = (props) => {
         <h2>{props.title}</h2>
       </header>
       <div>
-        <ButtonEl name={'View'} />
+        <ButtonEl name={'View'} linkTo={`/post/${props.id}`} />
         <span onClick={() => props.startEditHandler(props.id)} >
-          <ButtonEl marginLeft={true} name={'Edit'} />
+          <ButtonEl marginLeft={true} name={'Edit'} linkTo='#' />
         </span>
-        <ButtonEl marginLeft={true} name={'Delete'} />
+        <ButtonEl marginLeft={true} name={'Delete'} linkTo='#' />
       </div>
     </Wrapper>
   )

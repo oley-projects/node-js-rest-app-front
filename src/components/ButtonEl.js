@@ -1,12 +1,21 @@
+import { Link } from "react-router-dom";
+
 const ButtonEl = (props) => {
-  console.log(props.isFormValid);
   if (props.isFormValid === false && props.isFormValid !== undefined) {
     return (
-      <button disabled className={props.marginLeft ? 'margin-left' : ''}>{props.name}</button>
+      <button
+        disabled
+        className={props.marginLeft ? 'margin-left' : ''}
+      >
+        {props.name}
+      </button>
     ) 
   }
+  
   return (
-    <button className={props.marginLeft ? 'margin-left' : ''}>{props.name}</button>
+    <Link to={props.linkTo} className={props.marginLeft ? 'margin-left' : ''}><button>
+      {props.name}
+    </button></Link>
   )
 };
 

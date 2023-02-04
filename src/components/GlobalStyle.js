@@ -20,6 +20,7 @@ const GlobalStyle = createGlobalStyle`
   }
 
   a, button {
+    display: inline-block;
     text-decoration: none;
     color: #fff;
     border-radius: 0.5rem;
@@ -65,7 +66,7 @@ const GlobalStyle = createGlobalStyle`
     box-shadow: 0 0 3px rgba(0, 0, 0, 0.2);
   }
 
-  button {
+  a, button {
     &:disabled,
     &[disabled] {
       color: #bbb;

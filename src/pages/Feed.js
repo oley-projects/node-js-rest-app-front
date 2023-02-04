@@ -12,12 +12,11 @@ const Feed = () => {
     posts: [],
     totalPosts: 0,
     editPost: null,
-    status: '',
+    error: '',
     postPage: 1,
     postsLoading: true,
     editLoading: false
   });
-
   useEffect(() => {
     const loadPosts = async () => {
       try {
@@ -28,9 +27,7 @@ const Feed = () => {
         }
         const data = await res.json();
         const postData = data.posts;
-        setTimeout(() => {
-          setState({...state, postsLoading: false, ...state.posts, posts: postData});
-        }, 1000);
+        setState({...state, postsLoading: false, ...state.posts, posts: postData});
       } catch (error) {
         setState({...state, postsLoading: false});
         console.log(error);
@@ -107,7 +104,7 @@ const Feed = () => {
         isEditing: false,
         editPost: null,
         editLoading: false,
-        status: error.message
+        error: error.message
       });
     }
   };
