@@ -2,6 +2,7 @@ import { useState, useEffect } from "react";
 import { useParams } from "react-router-dom";
 
 import styled from "styled-components";
+import Loading from "../components/Loading";
 
 const SinglePost = () => {
   const { id } = useParams();
@@ -10,7 +11,8 @@ const SinglePost = () => {
     author: '',
     date: '',
     image: '',
-    content: ''
+    content: '',
+    isLoading: true
   });
   
   useEffect(() => {
@@ -23,14 +25,20 @@ const SinglePost = () => {
         const data = await res.json();
         const { title, creator: {name: author}, updatedAt: date, imageUrl: imagePath, content } = data.post;
         const image = `http:localhost:8080/${imagePath}`
-        setState({ ...state, title, author, date, image, content })
+        setState({ ...state, title, author, date, image, content, isLoading: false })
       } catch (error) {
         console.log(error);
+        setState({ ...state, isLoading: false})
       }
     };
     loadPost();
   // eslint-disable-next-line
   }, []);
+  if (state.isLoading) {
+    return (
+      <Loading />
+    );
+  }
   return (
     <Wrapper>
       <h1>{state.title}</h1>
