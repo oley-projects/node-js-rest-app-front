@@ -1,9 +1,6 @@
-import { useRef } from "react";
 import styled from "styled-components";
 
 const Input = (props) => {
-  const fileInput = useRef(null);
-
   return (
     <Wrapper>
       {props.label && (
@@ -19,7 +16,7 @@ const Input = (props) => {
           className={(props.touched && !props.valid) ? 'invalid' : ''}
           required={props.required}
           placeholder={props.placeholder}
-          onChange={e => props.inputChangeHandler(props.id, e.target.value, '', '')} maxLength='40'
+          onChange={e => props.inputChangeHandler(props.id, e.target.value, '')} maxLength='40'
           onBlur={() => props.inputBlurHandler(props.id)}
           value={props.value}
         />
@@ -30,7 +27,7 @@ const Input = (props) => {
           name={props.id}
           required={props.required}
           className={(props.touched && !props.valid) ? 'invalid' : ''}
-          onChange={e => props.inputChangeHandler(props.id, e.target.value, '', '')}
+          onChange={e => props.inputChangeHandler(props.id, e.target.value, '')}
           maxLength='300'
           onBlur={() => props.inputBlurHandler(props.id)}
           value={props.value}
@@ -42,10 +39,8 @@ const Input = (props) => {
           type={props.element}
           name={props.id}
           className={(props.touched && !props.valid) ? 'invalid' : ''}
-          onInput={e => props.inputChangeHandler(props.id, e.target.value, e.target.files, fileInput)}
+          onChange={e => props.inputChangeHandler(props.id, e.target.value, e.target.files)}
           onBlur={() => props.inputBlurHandler(props.id)}
-          ref={fileInput}
-          defaultValue={props.value}
         />
       )}
     </Wrapper>

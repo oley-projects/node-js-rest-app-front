@@ -24,7 +24,7 @@ const SinglePost = () => {
         }
         const data = await res.json();
         const { title, creator: {name: author}, updatedAt: date, imageUrl: imagePath, content } = data.post;
-        const image = `http:localhost:8080/${imagePath}`
+        const image = `http://localhost:8080/${imagePath}`
         setState({ ...state, title, author, date, image, content, isLoading: false })
       } catch (error) {
         console.log(error);
@@ -39,6 +39,7 @@ const SinglePost = () => {
       <Loading />
     );
   }
+  
   return (
     <Wrapper>
       <h1>{state.title}</h1>

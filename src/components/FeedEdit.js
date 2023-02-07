@@ -17,7 +17,7 @@ const FeedEdit = (props) => {
     },
     image: {
       value: '',
-      valid: true,
+      valid: false,
       touched: false,
       validators: [required]
     },
@@ -36,7 +36,6 @@ const FeedEdit = (props) => {
   });
   const ref = useRef(null);
   useOnClickOutside(ref, props.cancelEditHandler);
-
   useEffect(() => {
     if (props.isEditing && props.selectedPost) {
       setState((prevState) => {
@@ -62,15 +61,37 @@ const FeedEdit = (props) => {
     }
   // eslint-disable-next-line
   }, []);
-
-  const inputChangeHandler = (input, value, files, fileRef) => {
+  const inputChangeHandler = (input, value, files) => {
     if (files) {
       generateBase64FromImage(files[0])
         .then(b64 => {
-          setState({...state, imagePreview: b64 });
+          setState((prevState) => (
+            {
+              ...prevState,
+              imagePreview: b64,
+              postForm: {
+                ...prevState.postForm,
+                image: {
+                  ...prevState.postForm.image,
+                  value: files[0]
+                }
+              }
+            }
+            ));
         })
         .catch(() => {
-          setState({...state, imagePreview: null });
+          setState((prevState) => ({
+            ...prevState,
+            imagePreview: null,
+            postForm: {
+              ...prevState.postForm,
+              image: {
+                ...prevState.postForm.image,
+                value: '',
+                valid: false
+              }
+            }
+          }));
         });
     }
     setState((prevState) => {
@@ -78,13 +99,12 @@ const FeedEdit = (props) => {
       for (const validator of prevState.postForm[input].validators) {
         isValid = isValid && validator(value);
       }
-      
       const updatedForm = {
         ...prevState.postForm,
         [input] : {
           ...prevState.postForm[input],
           valid: isValid,
-          value: files ? fileRef.current.files[0].name : value
+          value: files ? '' : value
         }
       };
       let isFormValid = true;
@@ -126,7 +146,6 @@ const FeedEdit = (props) => {
           touched: true
         }
       }
-
       return {...state, postForm: updatedForm}
     });
   }
