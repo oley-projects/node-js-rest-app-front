@@ -44,6 +44,7 @@ const SinglePost = () => {
     <Wrapper>
       <h1>{state.title}</h1>
       <h3>Created by {state.author}</h3>
+      <p>{state.content}</p>
       <Image>
         <img src={state.image} alt={state.title} />
       </Image>
@@ -53,6 +54,9 @@ const SinglePost = () => {
 
 const Wrapper = styled.div`
   text-align: center;
+  p {
+    padding-top: 1rem;
+  }
 `;
 
 const Image = styled.div`

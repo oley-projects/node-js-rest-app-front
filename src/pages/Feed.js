@@ -26,7 +26,12 @@ const Feed = () => {
           throw new Error('Failed to fetch post!');
         }
         const data = await res.json();
-        const postData = data.posts;
+        const postData = data.posts.map(post => {
+          return {
+            ...post,
+            imagePath: post.imageUrl
+          };
+        });
         setState({...state, postsLoading: false, ...state.posts, posts: postData});
       } catch (error) {
         setState({...state, postsLoading: false});
@@ -64,6 +69,10 @@ const Feed = () => {
     formData.append('image', postData.image);
     let url = 'http://localhost:8080/feed/post';
     let method= 'POST';
+    if (state.editPost) {
+      url = 'http://localhost:8080/feed/post/' + state.editPost._id;
+      method = 'PUT';
+    }
     try {
       const res = await fetch(url, {
         method,
