@@ -13,7 +13,9 @@ const Post = (props) => {
         <span onClick={() => props.startEditHandler(props.id)} >
           <ButtonEl marginLeft={true} name={'Edit'} linkTo='#' />
         </span>
-        <ButtonEl marginLeft={true} name={'Delete'} linkTo='#' />
+        <span onClick={() => props.deletePostHandler(props.id)}>
+          <ButtonEl marginLeft={true} name={'Delete'} linkTo='#' />
+        </span>
       </div>
     </Wrapper>
   )

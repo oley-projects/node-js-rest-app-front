@@ -116,6 +116,30 @@ const Feed = () => {
     }
   };
 
+  const deletePostHandler = async (postId) => {
+    setState({...state, postsLoading: true});
+    try {
+      const res = await fetch('http://localhost:8080/feed/post/' + postId, {
+        method: 'DELETE'
+      });
+      if (res.status !== 200 && res.status !==201 ) {
+        throw new Error('Deleting a post failed!');
+      }
+      setState((prevState) => {
+        const updatedPosts = prevState.posts.filter(p => p._id !== postId);
+        return {
+          ...state,
+          posts: updatedPosts,
+          postsLoading: false
+        }
+      });
+    } catch (error) {
+        setState({...state, postsLoading: false});
+        console.log(error);
+    }
+
+  };
+
   return (
     <Wrapper className={state.isEditing ? 'overflow-hidden' : ''}>
       <div className='center'>
@@ -145,6 +169,7 @@ const Feed = () => {
             author={post.creator.name}
             date={new Date(post.createdAt).toLocaleDateString()}
             startEditHandler={startEditHandler}
+            deletePostHandler={deletePostHandler}
           />
         ))}
         </div>
