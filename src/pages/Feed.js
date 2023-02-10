@@ -3,6 +3,7 @@ import { useState, useEffect } from 'react';
 import Loading from '../components/Loading';
 import Post from '../components/Post'
 import FeedEdit from '../components/FeedEdit';
+import Paginator from '../components/Paginator'
 
 import styled from 'styled-components';
 
@@ -17,30 +18,48 @@ const Feed = () => {
     postsLoading: true,
     editLoading: false
   });
-  useEffect(() => {
-    const loadPosts = async () => {
-      try {
-        const res = await fetch('http://localhost:8080/feed/posts');
-        
-        if (res.status !== 200) {
-          throw new Error('Failed to fetch post!');
-        }
-        const data = await res.json();
-        const postData = data.posts.map(post => {
-          return {
-            ...post,
-            imagePath: post.imageUrl
-          };
-        });
-        setState({...state, postsLoading: false, ...state.posts, posts: postData});
-      } catch (error) {
-        setState({...state, postsLoading: false});
-        console.log(error);
+
+  const loadPosts = async (direction) => {
+    console.log(state);
+    if (direction) {
+      setState({ ...state, postsLoading: true, posts: [] });
+    }
+    let page = +state.postPage;
+    if (direction === 'next') {
+      page++;
+    }
+    if (direction === 'prev') {
+      page--;
+    }
+    try {
+      const res = await fetch('http://localhost:8080/feed/posts?page=' + page);
+      if (res.status !== 200) {
+        throw new Error('Failed to fetch post!');
       }
-    };
+      const data = await res.json();
+      const postData = data.posts.map(post => {
+        return {
+          ...post,
+          imagePath: post.imageUrl
+        };
+      });
+      setState({
+        ...state,
+        posts: postData,
+        totalPosts: data.totalItems,
+        postsLoading: false,
+        postPage: page
+      });
+    } catch (error) {
+      setState({...state, postsLoading: false});
+      console.log(error);
+    }
+  };
+
+  useEffect(() => {
     loadPosts();
   // eslint-disable-next-line
-  },[]);
+  }, []);
 
   const newPostHandler = () => {
     setState({...state, isEditing: true});
@@ -137,7 +156,6 @@ const Feed = () => {
         setState({...state, postsLoading: false});
         console.log(error);
     }
-
   };
 
   return (
@@ -161,6 +179,9 @@ const Feed = () => {
           />
         )}
         <div>
+        {!state.postsLoading && state.posts.length === 0 && (
+          <div>No posts found.</div>
+        )}
         {!state.postsLoading && state.posts.length && state.posts.map((post) => (
           <Post
             key={post._id}
@@ -172,6 +193,12 @@ const Feed = () => {
             deletePostHandler={deletePostHandler}
           />
         ))}
+        {!state.postsLoading && state.posts.length && (<Paginator
+            pageHandler={loadPosts}
+            lastPage={Math.ceil(state.totalPosts / 3)}
+            currentPage={state.postPage}
+          />
+        )}
         </div>
       </section>
     </Wrapper>

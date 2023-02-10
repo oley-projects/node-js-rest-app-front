@@ -22,6 +22,9 @@ const Post = (props) => {
 };
 
 const Wrapper = styled.div`
+  display: flex;
+  flex-direction: column;
+  align-items: center;
   margin-bottom: 2rem;
   padding: 1.5rem 3rem;
   box-shadow: 0 0 0.5rem rgba(55, 55, 55, 0.15);
