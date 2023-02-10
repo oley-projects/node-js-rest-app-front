@@ -20,7 +20,6 @@ const Feed = () => {
   });
 
   const loadPosts = async (direction) => {
-    console.log(state);
     if (direction) {
       setState({ ...state, postsLoading: true, posts: [] });
     }
@@ -91,7 +90,7 @@ const Feed = () => {
     if (state.editPost) {
       url = 'http://localhost:8080/feed/post/' + state.editPost._id;
       method = 'PUT';
-    }
+    } 
     try {
       const res = await fetch(url, {
         method,
@@ -103,9 +102,9 @@ const Feed = () => {
         throw new Error(message);
       }
       const { post } = await res.json();
-
-      setState( (prevState) => { 
+      setState(prevState => { 
         let updatedPosts = [...prevState.posts];
+        let currentPage = prevState.postPage;
         if (prevState.editPost) {
           const postIndex = prevState.posts.findIndex(
             (p) => p._id === prevState.editPost._id
@@ -113,6 +112,9 @@ const Feed = () => {
           updatedPosts[postIndex] = post;
         } else if (prevState.posts.length <= 1) {
           updatedPosts = prevState.posts.concat(post);
+        } else if (prevState.posts.length >= 3) {
+          updatedPosts = [post]
+          currentPage = +prevState.postPage + 1
         } else {
           updatedPosts = [...updatedPosts, post];
         }
@@ -121,7 +123,8 @@ const Feed = () => {
           isEditing: false,
           editPost: null,
           editLoading: false,
-          posts: updatedPosts
+          posts: updatedPosts,
+          postPage: currentPage
         }
       });
     } catch (error) {
@@ -144,8 +147,15 @@ const Feed = () => {
       if (res.status !== 200 && res.status !==201 ) {
         throw new Error('Deleting a post failed!');
       }
+      
       setState((prevState) => {
         const updatedPosts = prevState.posts.filter(p => p._id !== postId);
+        // return previous page for deleted last post on page
+        if (+state.posts.length === 1 && +state.postPage > 1) {
+          loadPosts('prev');
+        } else {
+          loadPosts();
+        }
         return {
           ...state,
           posts: updatedPosts,
