@@ -9,8 +9,8 @@ const Modal = (props) => {
       <hr />
       <div>{props.children}</div>
       <div className="right">
-        <span onClick={() => props.acceptEditPostHandler()}><ButtonEl name={'Apply'} isFormValid={props.isFormValid} /></span>
-        <span onClick={() => props.inputCancelHandler()}><ButtonEl name={'Cancel'} /></span>
+        <span onClick={() => props.onAccept()}><ButtonEl name={'Apply'} isFormValid={props.isFormValid} /></span>
+        <span onClick={() => props.onCancel()}><ButtonEl name={'Cancel'} /></span>
       </div>
     </>
   )

@@ -3,9 +3,9 @@ import { Outlet } from 'react-router-dom';
 import Navigation from '../components/Navigation';
 import Footer from '../components/Footer';
 
-const Layout = () => (
+const Layout = (props) => (
   <>
-    <Navigation />
+    <Navigation onLogout={props.onLogout} isAuth={props.isAuth} />
     <div className='container'>
       <Outlet />
     </div>

@@ -156,8 +156,8 @@ const FeedEdit = (props) => {
       <ModalWrap ref={ref}>
         <Modal
           title={'New Post'}
-          acceptEditPostHandler={acceptEditPostHandler}
-          inputCancelHandler={inputCancelHandler}
+          onAccept={acceptEditPostHandler}
+          onCancel={inputCancelHandler}
           isFormValid={state.isFormValid}
         >
           <form>

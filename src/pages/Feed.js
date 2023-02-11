@@ -192,7 +192,7 @@ const Feed = () => {
         {!state.postsLoading && state.posts.length === 0 && (
           <div>No posts found.</div>
         )}
-        {!state.postsLoading && state.posts.length && state.posts.map((post) => (
+        {!state.postsLoading && state.posts.length > 0 && state.posts.map((post) => (
           <Post
             key={post._id}
             id={post._id}
@@ -203,7 +203,7 @@ const Feed = () => {
             deletePostHandler={deletePostHandler}
           />
         ))}
-        {!state.postsLoading && state.posts.length && (<Paginator
+        {!state.postsLoading && state.posts.length > 0 && (<Paginator
             pageHandler={loadPosts}
             lastPage={Math.ceil(state.totalPosts / 3)}
             currentPage={state.postPage}

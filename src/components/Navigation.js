@@ -1,7 +1,13 @@
 import styled from "styled-components";
 import { Link } from "react-router-dom";
 
-const Navigation = () => {
+const navItems = [
+  { id: 'feed', text: 'Feed', link: '/', auth: true },
+  { id: 'login', text: 'Login', link: '/login', auth: false },
+  { id: 'signup', text: 'Signup', link: '/signup', auth: false }
+];
+
+const Navigation = (props) => {
   return (
     <Wrapper>
       <NavContent>
@@ -11,8 +17,14 @@ const Navigation = () => {
           </li>
         </ul>
         <ul>
-          <li><StyledLink to='/'>Feed</StyledLink></li>
-          <li><StyledLink to='login'>Login</StyledLink></li>
+          {[...navItems.filter(item => item.auth === props.isAuth).map(item => (
+            <li key={item.id}><StyledLink to={item.link}>{item.text}</StyledLink></li>
+          ))]}
+          {props.isAuth && (
+            <li>
+              <StyledLink to='#' onClick={props.onLogout}>Logout</StyledLink>
+            </li>
+          )}
         </ul>
       </NavContent>
     </Wrapper>
