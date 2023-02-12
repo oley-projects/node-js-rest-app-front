@@ -3,7 +3,7 @@ import styled from "styled-components";
 const Input = (props) => {
   return (
     <Wrapper>
-      {props.label && (
+      {props.id && (
         <label htmlFor={props.id}>
           {props.id}
         </label>

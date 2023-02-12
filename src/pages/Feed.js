@@ -170,10 +170,11 @@ const Feed = () => {
 
   return (
     <Wrapper className={state.isEditing ? 'overflow-hidden' : ''}>
-      <div className='center'>
+      <div className='center status-bar'>
         <input className='status-input' />
         <button className="status-btn">Update status</button>
       </div>
+      <hr />
       <div className='center'>
         <button style={{margin: '2rem 0'}} onClick={newPostHandler}>New post</button>
       </div>
@@ -226,14 +227,34 @@ const Wrapper = styled.div`
       border-color: #aaa2a1;
     }
   }
+  hr {
+    margin-top: 3rem;
+    @media (min-width: 640px) {
+      display: none;
+    }
+  }
+  .status-bar {
+    @media (max-width: 640px) {
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+    }
+  }
   .status-input {
-    width: auto;
-    border-top-left-radius: 0.5rem;
-    border-bottom-left-radius: 0.5rem;
+    @media (min-width: 640px) {
+      width: auto;
+      border-top-left-radius: 0.5rem;
+      border-bottom-left-radius: 0.5rem;
+    }
   }
   .status-btn {
-    border-top-left-radius: 0;
-    border-bottom-left-radius: 0;
+    @media (max-width: 640px) {
+      margin-top: 1rem;
+    }
+    @media (min-width: 640px) {
+      border-top-left-radius: 0;
+      border-bottom-left-radius: 0;
+    }
   }
 `;
 

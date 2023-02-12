@@ -81,6 +81,7 @@ const GlobalStyle = createGlobalStyle`
   }
 
   .container {
+    margin-top: 5rem;
     padding: 3rem 2rem;
     min-height: calc(100vh - 10rem);
     background-color: #fafaf1;

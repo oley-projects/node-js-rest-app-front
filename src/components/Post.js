@@ -26,7 +26,7 @@ const Wrapper = styled.div`
   flex-direction: column;
   align-items: center;
   margin-bottom: 2rem;
-  padding: 1.5rem 3rem;
+  padding: 1rem 2rem;
   box-shadow: 0 0 0.5rem rgba(55, 55, 55, 0.15);
   background-color: rgba(255, 255, 222, 0.8);
   border-radius: 0.5rem;
@@ -36,6 +36,9 @@ const Wrapper = styled.div`
   }
   header {
     margin-bottom: 2rem;
+  }
+  @media (min-width: 480px) {
+    padding: 1.5rem 3rem;
   }
 `;
 

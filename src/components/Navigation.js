@@ -1,64 +1,78 @@
+import { useState } from "react";
+import NavContent from "./NavContent";
 import styled from "styled-components";
-import { Link } from "react-router-dom";
-
-const navItems = [
-  { id: 'feed', text: 'Feed', link: '/', auth: true },
-  { id: 'login', text: 'Login', link: '/login', auth: false },
-  { id: 'signup', text: 'Signup', link: '/signup', auth: false }
-];
 
 const Navigation = (props) => {
+  const [isMobileOpen, setIsMobileOpen] = useState(false);
   return (
     <Wrapper>
-      <NavContent>
-        <ul>
+      <nav>
+        <ul className="mobile">
           <li>
-            <StyledLink to='/'>Home</StyledLink>
+            <div className="hamburher" onClick={() => setIsMobileOpen(!isMobileOpen)}>
+              <div></div>
+              <div></div>
+              <div></div>
+            </div>
           </li>
         </ul>
-        <ul>
-          {[...navItems.filter(item => item.auth === props.isAuth).map(item => (
-            <li key={item.id}><StyledLink to={item.link}>{item.text}</StyledLink></li>
-          ))]}
-          {props.isAuth && (
-            <li>
-              <StyledLink to='#' onClick={props.onLogout}>Logout</StyledLink>
-            </li>
-          )}
-        </ul>
-      </NavContent>
+        <NavContent isMobileOpen={isMobileOpen} isAuth={props.isAuth} onLogout={props.onLogout} />
+      </nav>
     </Wrapper>
   )
 };
 
-const Wrapper = styled.header`
-  padding: 0 2rem;
-  height: 5rem;
-  background-color: #b9bacf;
-  @media (min-width: 960px) {
-    padding: 0 5rem;
-  }
-`;
-const NavContent = styled.nav`
-  display: flex;
-  justify-content: space-between;
-  align-items: center;
-
-  li {
-    display: inline-block;
-    height: 5rem;
-    &:not(:first-of-type) {
-      margin-left: 1rem;
+const Wrapper = styled.div`
+  position: fixed;
+  top: 0;
+  left: 0;
+  right: 0;
+  nav {
+    padding: 0 2rem;
+    background-color: #b9bacf;
+    position: relative;
+    @media (min-width: 960px) {
+      padding: 0 5rem;
     }
   }
-`;
-const StyledLink = styled(Link)`
-  margin: 1rem 0;
-  padding: 0 1.5rem;
-  height: 3rem;
-  text-transform: uppercase;
-  display: flex;
-  align-items: center;
+  .mobile {
+    padding: 1rem 0;
+    .hamburher {
+      padding-left: 1rem;
+      height: 3rem;
+      display: flex;
+      flex-direction: column;
+      justify-content: center;
+      border-radius: 0.5rem;
+      cursor: pointer;
+      div {
+        margin: 0.15rem 0;
+        background: #eee;
+        height: 0.18rem;
+        width: 1.8rem;
+      }
+      &:hover, &:active {
+        background: #aaa2a1;
+      }
+      @media (min-width: 640px) {
+        display: none;
+      }
+    }
+    @media (min-width: 640px) {
+      padding: 0;
+    }
+  }
+  .mobile-nav {
+    @media (max-width: 640px) {
+      position: absolute;
+      top: 5rem;
+      left: 0;
+      right: 0;
+      background-color: #b9bacf;
+      padding: 0 1.5rem;
+      display: block;
+    }
+  }
 `;
 
 export default Navigation;
