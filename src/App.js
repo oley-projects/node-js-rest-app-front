@@ -7,6 +7,8 @@ import Signup from "./pages/Signup";
 import SinglePost from "./pages/SinglePost";
 import Error from "./pages/Error";
 import Layout from "./pages/Layout";
+import CheckingAuth from "./components/CheckingAuth";
+import CheckingNotAuth from "./components/CheckingNotAuth";
 
 import GlobalStyle from "./components/GlobalStyle";
 import ErrorHandler from "./components/ErrorHandler";
@@ -14,7 +16,7 @@ import ErrorHandler from "./components/ErrorHandler";
 const App = () => {
   const navigate = useNavigate()
   const [state, setState] = useState({
-    isAuth: false,
+    isAuth: true,
     token: null,
     userId: null,
     authLoading: false,
@@ -120,10 +122,16 @@ const App = () => {
       <ErrorHandler error={state.error} onHandle={errorHandler} />
       <Routes>
         <Route element={<Layout onLogout={logoutHandler} isAuth={state.isAuth} />}>
-          <Route path="/" element={<Feed />} />
-          <Route path="login" element={<Login onLogin={loginHandler} loading={state.authLoading} />} />
-          <Route path="signup" element={<Signup onSignup={signupHandler} loading={state.authLoading} />} />
-          <Route path="post/:id" element={<SinglePost />} />
+          <Route element={<CheckingAuth isAuth={state.isAuth} />}>
+            <Route path="/" element={<Feed />} />
+          </Route>
+          <Route element={<CheckingNotAuth isAuth={state.isAuth} />}>
+            <Route path="login" element={<Login onLogin={loginHandler} loading={state.authLoading} />} />
+            <Route path="signup" element={<Signup onSignup={signupHandler} loading={state.authLoading} />} />
+          </Route>
+          <Route element={<CheckingAuth isAuth={state.isAuth} />}>
+            <Route path="post/:id" element={<SinglePost />} />
+          </Route>
           <Route path="*" element={<Error />} />
         </Route>
       </Routes>
