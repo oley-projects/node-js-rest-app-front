@@ -1,4 +1,4 @@
-import { useState } from "react";
+import { useState, useEffect } from "react";
 
 import Input from "../components/Input";
 import ButtonEl from "../components/ButtonEl";
@@ -25,10 +25,17 @@ const Login = (props) => {
     }
   });
 
+  
+  useEffect(() => {
+    setState(prevState => {
+      return {...prevState, formIsValid: false}
+    })
+  }, []);
+
   const inputChangeHandler = (input, value) => {
     setState(prevState => {
       let isValid = true;
-      for (const validator of prevState.signupForm[input].validators) {
+      for (const validator of prevState.loginForm[input].validators) {
         isValid = isValid && validator(value);
       }
       const updatedForm = {
@@ -94,7 +101,15 @@ const Login = (props) => {
           touched={state.loginForm.password.touched}
           value={state.loginForm.password.value || ''}
         />
-        <ButtonEl linkTo='#' name='login' />
+        <div className="center">
+          <ButtonEl
+            linkTo='#'
+            name='login'
+            clickHandler={props.onLogin}
+            state={{email: state.loginForm.email.value, password: state.loginForm.password.value}}
+            isFormValid={state.formIsValid}
+          />
+        </div>
       </form>
     </Wrapper>
   )

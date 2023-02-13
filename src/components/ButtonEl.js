@@ -6,7 +6,6 @@ const ButtonEl = (props) => {
       <button
         disabled
         className={props.marginLeft ? 'margin-left' : ''}
-        type={props.type || 'button'}
       >
         {props.name}
       </button>

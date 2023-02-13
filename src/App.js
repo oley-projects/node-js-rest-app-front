@@ -16,7 +16,7 @@ import ErrorHandler from "./components/ErrorHandler";
 const App = () => {
   const navigate = useNavigate()
   const [state, setState] = useState({
-    isAuth: true,
+    isAuth: false,
     token: null,
     userId: null,
     authLoading: false,
@@ -50,7 +50,16 @@ const App = () => {
     e.preventDefault();
     setState({...state, authLoading: true});
     try {
-      const res = await fetch('URL');
+      const res = await fetch('http://localhost:8080/auth/login', {
+        method: 'POST',
+        headers: {
+          'Content-Type': 'application/json'
+        },
+        body: JSON.stringify({
+          email: authData.email,
+          password: authData.password
+        })
+      });
       if (res.status === 422) {
         throw new Error('Validation failed.');
       }

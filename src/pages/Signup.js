@@ -1,4 +1,4 @@
-import { useState } from "react";
+import { useState, useEffect } from "react";
 
 import Input from "../components/Input";
 import ButtonEl from "../components/ButtonEl";
@@ -13,23 +13,29 @@ const Signup = (props) => {
         value: '',
         valid: false,
         touched: false,
-        validators: [required, email]
+        validators: [required, email, length({ max: 35 })]
       },
       password: {
         value: '',
         valid: false,
         touched: false,
-        validators: [required, length({ min: 5 })]
+        validators: [required, length({ min: 5, max: 35 })]
       },
       name: {
         value: '',
         valid: false,
         touched: false,
-        validators: [required]
+        validators: [required, length({ max: 35 })]
       },
       formIsValid: false
     }
   });
+
+  useEffect(() => {
+    setState(prevState => {
+      return {...prevState, formIsValid: false}
+    })
+  }, []);
 
   const inputChangeHandler = (input, value) => {
     setState(prevState => {
@@ -109,7 +115,15 @@ const Signup = (props) => {
           touched={state.signupForm.password.touched}
           value={state.signupForm.password.value || ''}
         />
-        <ButtonEl linkTo='#' name='signup' clickHandler={props.onSignup} state={state} isFormValid={state.formIsValid} />
+        <div className="center">
+          <ButtonEl
+            linkTo='#'
+            name='signup'
+            clickHandler={props.onSignup}
+            state={state}
+            isFormValid={state.formIsValid}
+          />
+        </div>
       </form>
     </Wrapper>
   )
