@@ -2,6 +2,7 @@ import { useState, useRef, useEffect } from "react";
 
 import Modal from "./Modal";
 import Input from "./Input";
+import ButtonEl from "./ButtonEl";
 import useOnClickOutside from "../hooks/useOnClickOutside";
 import { generateBase64FromImage } from '../utils/image'
 import { required, length } from '../utils/validators'
@@ -154,12 +155,7 @@ const FeedEdit = (props) => {
     <>
       <Wrapper />
       <ModalWrap ref={ref}>
-        <Modal
-          title={'New Post'}
-          onAccept={acceptEditPostHandler}
-          onCancel={inputCancelHandler}
-          isFormValid={state.isFormValid}
-        >
+        <Modal title={'New Post'}>
           <form>
             <Input
               element='input'
@@ -196,6 +192,10 @@ const FeedEdit = (props) => {
               touched={state.postForm.content.touched}
               value={state.postForm.content.value || ''}
             />
+            <div className="right">
+              <ButtonEl name={'Apply'} isFormValid={state.isFormValid} clickHandler={acceptEditPostHandler} />
+              <ButtonEl name={'Cancel'} clickHandler={inputCancelHandler} />
+            </div>
           </form>
         </Modal>
       </ModalWrap>

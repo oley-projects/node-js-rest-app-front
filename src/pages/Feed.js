@@ -218,10 +218,9 @@ const Feed = () => {
 
 const Wrapper = styled.div`
   button {
-    padding: 1rem 1.5rem;
     color: #999;
-    transition: all 0.2s;
     border: 0.1rem solid rgb(239, 239, 239);
+    transition: all ease 0.2s;
     &:hover, &:active {
       color: #eee;
       border-color: #aaa2a1;

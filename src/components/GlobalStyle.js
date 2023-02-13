@@ -22,9 +22,9 @@ const GlobalStyle = createGlobalStyle`
   a, button {
     display: inline-block;
     text-decoration: none;
+    text-transform: capitalize;
     color: #fff;
     border-radius: 0.5rem;
-    transition: all 0.2s;
     outline: none;
     border: 0;
     font-size: 1.3rem;
@@ -34,6 +34,9 @@ const GlobalStyle = createGlobalStyle`
       color: #fcfcfa;
       background: #aaa2a1;
     }
+  }
+  button {
+    padding: 1rem 1.5rem;
   }
 
   input, textarea {
@@ -49,6 +52,10 @@ const GlobalStyle = createGlobalStyle`
     }
     &.invalid {
       border-color: rgba(200, 25, 25, 0.5);
+    }
+    &::placeholder {
+      font-size: 1rem;
+      color: #bbb;
     }
   }
 

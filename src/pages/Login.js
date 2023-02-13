@@ -76,6 +76,7 @@ const Login = (props) => {
           element='input'
           id='email'
           required={true}
+          placeholder={'Enter your Email'}
           inputChangeHandler={inputChangeHandler}
           inputBlurHandler={inputBlurHandler}
           valid={state.loginForm.email.valid}
@@ -86,6 +87,7 @@ const Login = (props) => {
           element='input'
           id='password'
           required={true}
+          placeholder={'Enter your Password'}
           inputChangeHandler={inputChangeHandler}
           inputBlurHandler={inputBlurHandler}
           valid={state.loginForm.password.valid}
@@ -102,12 +104,21 @@ const Wrapper = styled.div`
   margin: 7rem auto 0;
   padding: 1.5rem;
   max-width: 30rem;
-  border: 1px solid rgba(0, 0, 0, 0.15);
-  box-shadow: 0 0 0.5rem rgba(0, 0, 0, 0.15);
+  border: 1px solid rgba(0, 0, 0, 0.1);
+  box-shadow: 0 0 0.3rem rgba(0, 0, 0, 0.1);
   border-radius: 0.5rem;
   header {
     margin-bottom: 3rem;
     text-align: center;
+  }
+  button {
+    color: #999;
+    border: 0.1rem solid rgb(239, 239, 239);
+    transition: all ease 0.2s;
+    &:hover, &:active {
+      color: #eee;
+      border-color: #aaa2a1;
+    }
   }
 `;
 

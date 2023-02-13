@@ -51,6 +51,7 @@ const StyledLink = styled(Link)`
   text-transform: uppercase;
   display: flex;
   align-items: center;
+  transition: all ease 0.2s;
 `;
 
 export default NavContent;

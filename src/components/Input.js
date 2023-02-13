@@ -26,6 +26,7 @@ const Input = (props) => {
           id={props.id}
           name={props.id}
           required={props.required}
+          placeholder={props.placeholder}
           className={(props.touched && !props.valid) ? 'invalid' : ''}
           onChange={e => props.inputChangeHandler(props.id, e.target.value, '')}
           maxLength='300'

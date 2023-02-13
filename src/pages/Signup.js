@@ -75,11 +75,12 @@ const Signup = (props) => {
       <header>
         <h2>Sign Up</h2>
       </header>
-      <form onSubmit={e => props.onSignup(e, state)}>
+      <form>
         <Input
           element='input'
           id='email'
           required={true}
+          placeholder={'Enter your Email'}
           inputChangeHandler={inputChangeHandler}
           inputBlurHandler={inputBlurHandler}
           valid={state.signupForm.email.valid}
@@ -90,6 +91,7 @@ const Signup = (props) => {
           element='input'
           id='name'
           required={true}
+          placeholder={'Enter your Name'}
           inputChangeHandler={inputChangeHandler}
           inputBlurHandler={inputBlurHandler}
           valid={state.signupForm.name.valid}
@@ -100,13 +102,14 @@ const Signup = (props) => {
           element='input'
           id='password'
           required={true}
+          placeholder={'Type a password'}
           inputChangeHandler={inputChangeHandler}
           inputBlurHandler={inputBlurHandler}
           valid={state.signupForm.password.valid}
           touched={state.signupForm.password.touched}
           value={state.signupForm.password.value || ''}
         />
-        <ButtonEl linkTo='#' name='signup' />
+        <ButtonEl linkTo='#' name='signup' clickHandler={props.onSignup} state={state} isFormValid={state.formIsValid} />
       </form>
     </Wrapper>
   )
@@ -116,12 +119,21 @@ const Wrapper = styled.div`
   margin: 7rem auto 0;
   padding: 1.5rem;
   max-width: 30rem;
-  border: 1px solid rgba(0, 0, 0, 0.15);
-  box-shadow: 0 0 0.5rem rgba(0, 0, 0, 0.15);
+  border: 1px solid rgba(0, 0, 0, 0.1);
+  box-shadow: 0 0 0.3rem rgba(0, 0, 0, 0.1);
   border-radius: 0.5rem;
   header {
     margin-bottom: 3rem;
     text-align: center;
+  }
+  button {
+    color: #999;
+    border: 0.1rem solid rgb(239, 239, 239);
+    transition: all ease 0.2s;
+    &:hover, &:active {
+      color: #eee;
+      border-color: #aaa2a1;
+    }
   }
 `;
 

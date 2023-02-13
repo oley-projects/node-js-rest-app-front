@@ -1,6 +1,3 @@
-import ButtonEl from "./ButtonEl";
-// import styled from "styled-components";
-
 const Modal = (props) => {
 
   return (
@@ -8,10 +5,6 @@ const Modal = (props) => {
       <h1>{props.title}</h1>
       <hr />
       <div>{props.children}</div>
-      <div className="right">
-        <span onClick={() => props.onAccept()}><ButtonEl name={'Apply'} isFormValid={props.isFormValid} /></span>
-        <span onClick={() => props.onCancel()}><ButtonEl name={'Cancel'} /></span>
-      </div>
     </>
   )
 };

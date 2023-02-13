@@ -6,6 +6,7 @@ const ButtonEl = (props) => {
       <button
         disabled
         className={props.marginLeft ? 'margin-left' : ''}
+        type={props.type || 'button'}
       >
         {props.name}
       </button>
@@ -13,9 +14,13 @@ const ButtonEl = (props) => {
   }
   
   return (
-    <Link to={props.linkTo} className={props.marginLeft ? 'margin-left' : ''}><button>
-      {props.name}
-    </button></Link>
+    <Link
+      to={props.linkTo}
+      className={props.marginLeft ? 'margin-left' : ''}
+      onClick={(e => props.clickHandler && props.clickHandler(e, props.state))}
+    >
+      <button>{props.name}</button>
+    </Link>
   )
 };
 

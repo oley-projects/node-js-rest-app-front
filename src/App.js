@@ -83,9 +83,9 @@ const App = () => {
           'Content-Type': 'application/json'
         },
         body: JSON.stringify({
-          email: authData.email,
-          password: authData.password,
-          name: authData.name
+          email: authData.signupForm.email.value,
+          password: authData.signupForm.password.value,
+          name: authData.signupForm.name.value
         })
       });
       if (res.status === 422) {
