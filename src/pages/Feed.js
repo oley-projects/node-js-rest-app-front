@@ -158,20 +158,23 @@ const Feed = (props) => {
         throw new Error('Deleting a post failed!');
       }
       
-      setState((prevState) => {
-        const updatedPosts = prevState.posts.filter(p => p._id !== postId);
-        // return previous page for deleted last post on page
-        if (+state.posts.length === 1 && +state.postPage > 1) {
-          loadPosts('prev');
-        } else {
-          loadPosts();
-        }
-        return {
-          ...state,
-          posts: updatedPosts,
-          postsLoading: false
-        }
-      });
+      if (!state.postsLoading) {
+        setState((prevState) => {
+          const updatedPosts = prevState.posts.filter(p => p._id !== postId);
+          // return previous page for deleted last post on page
+          if (+state.posts.length === 1 && +state.postPage > 1) {
+            loadPosts('prev');
+          } else {
+            loadPosts();
+          }
+          return {
+            ...state,
+            posts: updatedPosts,
+            postsLoading: false
+          }
+        });
+      }
+      
     } catch (error) {
         setState({...state, postsLoading: false});
         console.log(error);

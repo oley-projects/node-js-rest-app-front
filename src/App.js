@@ -71,7 +71,7 @@ const App = () => {
       setState({...state, isAuth: true, token, authLoading: false, userId});
       localStorage.setItem('token', token);
       localStorage.setItem('userId', userId);
-      const remainingMilliseconds = 60 * 60 * 1000;
+      const remainingMilliseconds = 2 * 60 * 60 * 1000;
       const expiryDate = new Date(
         new Date().getTime() + remainingMilliseconds
       );
@@ -106,8 +106,7 @@ const App = () => {
         console.log('Error!');
         throw new Error('Creating a user failed!');
       }
-      const data = await res.json();
-      console.log(data);
+      // const data = await res.json();
       navigate('/', { replace: true });
       setState({...state, isAuth: false, authLoading: false});
     } catch (error) {
