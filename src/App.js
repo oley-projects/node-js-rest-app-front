@@ -132,14 +132,14 @@ const App = () => {
       <Routes>
         <Route element={<Layout onLogout={logoutHandler} isAuth={state.isAuth} />}>
           <Route element={<CheckingAuth isAuth={state.isAuth} />}>
-            <Route path="/" element={<Feed />} />
+            <Route path="/" element={<Feed token={state.token} userId={state.userId} />} />
           </Route>
           <Route element={<CheckingNotAuth isAuth={state.isAuth} />}>
             <Route path="login" element={<Login onLogin={loginHandler} loading={state.authLoading} />} />
             <Route path="signup" element={<Signup onSignup={signupHandler} loading={state.authLoading} />} />
           </Route>
           <Route element={<CheckingAuth isAuth={state.isAuth} />}>
-            <Route path="post/:id" element={<SinglePost />} />
+            <Route path="post/:id" element={<SinglePost token={state.token} userId={state.userId} />} />
           </Route>
           <Route path="*" element={<Error />} />
         </Route>

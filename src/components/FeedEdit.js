@@ -160,6 +160,7 @@ const FeedEdit = (props) => {
             <Input
               element='input'
               id='title'
+              type='text'
               required={true}
               inputChangeHandler={inputChangeHandler}
               inputBlurHandler={inputBlurHandler}

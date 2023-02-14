@@ -7,7 +7,7 @@ import Paginator from '../components/Paginator'
 
 import styled from 'styled-components';
 
-const Feed = () => {
+const Feed = (props) => {
   const [state, setState] = useState({
     isEditing: false,
     posts: [],
@@ -31,7 +31,11 @@ const Feed = () => {
       page--;
     }
     try {
-      const res = await fetch('http://localhost:8080/feed/posts?page=' + page);
+      const res = await fetch('http://localhost:8080/feed/posts?page=' + page, {
+        headers: {
+          Authorization: 'Bearer ' + props.token
+        }
+      });
       if (res.status !== 200) {
         throw new Error('Failed to fetch post!');
       }
@@ -68,7 +72,7 @@ const Feed = () => {
     setState({...state, isEditing: false, editPost: null});
   };
 
-  const startEditHandler = (postId) => {
+  const startEditHandler = (_, postId) => {
     setState((prevState) => {
       const loadedPost = { ...prevState.posts.find(p => p._id === postId) };
       return {
@@ -94,7 +98,10 @@ const Feed = () => {
     try {
       const res = await fetch(url, {
         method,
-        body: formData
+        body: formData,
+        headers: {
+          Authorization: 'Bearer ' + props.token
+        }
       });
       if (res.status !== 200 && res.status !== 201) {
         const text = await res.text();
@@ -138,11 +145,14 @@ const Feed = () => {
     }
   };
 
-  const deletePostHandler = async (postId) => {
+  const deletePostHandler = async (_, postId) => {
     setState({...state, postsLoading: true});
     try {
       const res = await fetch('http://localhost:8080/feed/post/' + postId, {
-        method: 'DELETE'
+        method: 'DELETE',
+        headers: {
+          Authorization: 'Bearer ' + props.token
+        }
       });
       if (res.status !== 200 && res.status !==201 ) {
         throw new Error('Deleting a post failed!');

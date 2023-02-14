@@ -4,7 +4,7 @@ import { useParams } from "react-router-dom";
 import styled from "styled-components";
 import Loading from "../components/Loading";
 
-const SinglePost = () => {
+const SinglePost = (props) => {
   const { id } = useParams();
   const [state, setState] = useState({
     title: '',
@@ -14,11 +14,15 @@ const SinglePost = () => {
     content: '',
     isLoading: true
   });
-  
+
   useEffect(() => {
     const loadPost = async () => {
       try {
-        const res = await fetch(`http://localhost:8080/feed/post/${id}`);
+        const res = await fetch(`http://localhost:8080/feed/post/${id}`, {
+          headers: {
+            Authorization: 'Bearer ' + props.token
+          }
+        });
         if (res.status !== 200) {
           throw new Error('Failed to fetch post!');
         }

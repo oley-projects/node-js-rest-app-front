@@ -98,7 +98,9 @@ const GlobalStyle = createGlobalStyle`
   }
 
   .margin-left {
-    margin-left: 0.5rem;
+    @media (min-width: 460px) {
+      margin-left: 0.5rem;
+    }
   }
 
   .center {

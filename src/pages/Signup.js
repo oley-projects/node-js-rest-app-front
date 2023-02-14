@@ -85,6 +85,7 @@ const Signup = (props) => {
         <Input
           element='input'
           id='email'
+          type='email'
           required={true}
           placeholder={'Enter your Email'}
           inputChangeHandler={inputChangeHandler}
@@ -96,6 +97,7 @@ const Signup = (props) => {
         <Input
           element='input'
           id='name'
+          type='text'
           required={true}
           placeholder={'Enter your Name'}
           inputChangeHandler={inputChangeHandler}
@@ -107,6 +109,7 @@ const Signup = (props) => {
         <Input
           element='input'
           id='password'
+          type='password'
           required={true}
           placeholder={'Type a password'}
           inputChangeHandler={inputChangeHandler}

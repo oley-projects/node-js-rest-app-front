@@ -8,15 +8,11 @@ const Post = (props) => {
         <h4>Posted by {props.author} at {props.date}</h4>
         <h2>{props.title}</h2>
       </header>
-      <div>
+      <ButtonPanel>
         <ButtonEl name={'View'} linkTo={`/post/${props.id}`} />
-        <span onClick={() => props.startEditHandler(props.id)} >
-          <ButtonEl marginLeft={true} name={'Edit'} linkTo='#' />
-        </span>
-        <span onClick={() => props.deletePostHandler(props.id)}>
-          <ButtonEl marginLeft={true} name={'Delete'} linkTo='#' />
-        </span>
-      </div>
+        <ButtonEl marginLeft={true} name={'Edit'} linkTo='#' clickHandler={props.startEditHandler} state={props.id} />
+        <ButtonEl marginLeft={true} name={'Delete'} linkTo='#' clickHandler={props.deletePostHandler} state={props.id} />
+      </ButtonPanel>
     </Wrapper>
   )
 };
@@ -39,6 +35,15 @@ const Wrapper = styled.div`
   }
   @media (min-width: 480px) {
     padding: 1.5rem 3rem;
+  }
+`;
+const ButtonPanel = styled.div`
+  @media (max-width: 460px) {
+    display: flex;
+    flex-wrap: wrap;
+    a {
+      margin: 0.2rem;
+    }
   }
 `;
 
