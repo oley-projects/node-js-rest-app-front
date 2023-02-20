@@ -11,6 +11,7 @@ const Feed = (props) => {
   const [state, setState] = useState({
     isEditing: false,
     posts: [],
+    status: '',
     totalPosts: 0,
     editPost: null,
     error: '',
@@ -60,9 +61,47 @@ const Feed = (props) => {
   };
 
   useEffect(() => {
+    const loadStatus = async () => {
+      try {
+        const res = await fetch('http://localhost:8080/auth/status', {
+          headers: {
+            Authorization: 'Bearer ' + props.token
+          }
+        });
+        if (res.status !== 200) {
+          throw new Error('Failed to fetch user status.');
+        }
+        const data = await res.json();
+        setState({...state, status: data.status});
+      } catch (error) {
+        console.log(error);
+      }
+    }
     loadPosts();
+    loadStatus();
   // eslint-disable-next-line
   }, []);
+
+  const statusUpdateHandler = async () => {
+    try {
+      const res = await fetch('http://localhost:8080/auth/status', {
+        method: 'PATCH',
+        headers: {
+          Authorization: 'Bearer ' + props.token,
+          'Content-Type': 'application/json'
+        },
+        body: JSON.stringify({ status: state.status })
+      });
+      if (res.status !== 200) {
+        throw new Error('Failed to update user status!');
+      }
+      const data = await res.json();
+      //setState({...state, status: data.status});
+      console.log(data);
+    } catch (error) {
+      console.log(error);
+    }
+  }
 
   const newPostHandler = () => {
     setState({...state, isEditing: true});
@@ -145,6 +184,10 @@ const Feed = (props) => {
     }
   };
 
+  const statusInputChangeHandler = (value) => {
+    setState({ ...state, status: value })
+  }
+
   const deletePostHandler = async (_, postId) => {
     setState({...state, postsLoading: true});
     try {
@@ -183,10 +226,17 @@ const Feed = (props) => {
 
   return (
     <Wrapper className={state.isEditing ? 'overflow-hidden' : ''}>
-      <div className='center status-bar'>
-        <input className='status-input' />
-        <button className="status-btn">Update status</button>
-      </div>
+      <form onSubmit={e => e.preventDefault()} className='center status-bar'>
+        <input
+          className='status-input'
+          type='text'
+          required
+          placeholder='Your status'
+          onChange={statusInputChangeHandler}
+          value={state.status}
+        />
+        <button className="status-btn" onClick={statusUpdateHandler}>Update status</button>
+      </form>
       <hr />
       <div className='center'>
         <button style={{margin: '2rem 0'}} onClick={newPostHandler}>New post</button>
