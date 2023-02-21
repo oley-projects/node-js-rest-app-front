@@ -11,7 +11,8 @@ const Feed = (props) => {
   const [state, setState] = useState({
     isEditing: false,
     posts: [],
-    status: '',
+    userStatus: '',
+    statusInputValue: '',
     totalPosts: 0,
     editPost: null,
     error: '',
@@ -19,7 +20,11 @@ const Feed = (props) => {
     postsLoading: true,
     editLoading: false
   });
+  useEffect(() => {
 
+    loadPosts();
+  // eslint-disable-next-line
+  }, []);
   const loadPosts = async (direction) => {
     if (direction) {
       setState({ ...state, postsLoading: true, posts: [] });
@@ -47,42 +52,40 @@ const Feed = (props) => {
           imagePath: post.imageUrl
         };
       });
+      const resStatus = await fetch('http://localhost:8080/auth/status', {
+          method: 'GET',
+          headers: {
+            Authorization: 'Bearer ' + props.token
+          }
+        });
+        if (resStatus.status !== 200) {
+          throw new Error('Failed to fetch user status.');
+        }
+        const dataStatus = await resStatus.json();
       setState({
         ...state,
         posts: postData,
         totalPosts: data.totalItems,
         postsLoading: false,
-        postPage: page
+        postPage: page,
+        userStatus: dataStatus.status
       });
     } catch (error) {
       setState({...state, postsLoading: false});
       console.log(error);
     }
   };
-
-  useEffect(() => {
-    const loadStatus = async () => {
-      try {
-        const res = await fetch('http://localhost:8080/auth/status', {
-          headers: {
-            Authorization: 'Bearer ' + props.token
-          }
-        });
-        if (res.status !== 200) {
-          throw new Error('Failed to fetch user status.');
-        }
-        const data = await res.json();
-        setState({...state, status: data.status});
-      } catch (error) {
-        console.log(error);
-      }
-    }
-    loadPosts();
-    loadStatus();
-  // eslint-disable-next-line
-  }, []);
-
+console.log(state.error);
   const statusUpdateHandler = async () => {
+    if (state.statusInputValue === state.userStatus) {
+      setState({...state, statusInputValue: '', error: 'Your status had not changed'})
+      throw new Error('You type your previous status, please use different one!');
+    }
+    if (!state.statusInputValue) {
+      setState({...state, error: 'Not valid status'});
+      throw new Error('Invalid status!');
+    }
+    setState({...state, editLoading: true});
     try {
       const res = await fetch('http://localhost:8080/auth/status', {
         method: 'PATCH',
@@ -90,16 +93,20 @@ const Feed = (props) => {
           Authorization: 'Bearer ' + props.token,
           'Content-Type': 'application/json'
         },
-        body: JSON.stringify({ status: state.status })
+        body: JSON.stringify({ userStatus: state.statusInputValue })
       });
       if (res.status !== 200) {
         throw new Error('Failed to update user status!');
       }
-      const data = await res.json();
-      //setState({...state, status: data.status});
-      console.log(data);
+      setState(prevState => ({
+        ...prevState,
+        editLoading: false,
+        userStatus: prevState.statusInputValue,
+        statusInputValue: ''
+      }));
     } catch (error) {
       console.log(error);
+      setState({...state, editLoading: false});
     }
   }
 
@@ -185,7 +192,7 @@ const Feed = (props) => {
   };
 
   const statusInputChangeHandler = (value) => {
-    setState({ ...state, status: value })
+    setState({ ...state, statusInputValue: value })
   }
 
   const deletePostHandler = async (_, postId) => {
@@ -200,7 +207,6 @@ const Feed = (props) => {
       if (res.status !== 200 && res.status !==201 ) {
         throw new Error('Deleting a post failed!');
       }
-      
       if (!state.postsLoading) {
         setState((prevState) => {
           const updatedPosts = prevState.posts.filter(p => p._id !== postId);
@@ -217,7 +223,6 @@ const Feed = (props) => {
           }
         });
       }
-      
     } catch (error) {
         setState({...state, postsLoading: false});
         console.log(error);
@@ -230,13 +235,18 @@ const Feed = (props) => {
         <input
           className='status-input'
           type='text'
+          id='status'
           required
-          placeholder='Your status'
-          onChange={statusInputChangeHandler}
-          value={state.status}
+          placeholder={state.userStatus}
+          onChange={(e) => statusInputChangeHandler(e.target.value)}
+          value={state.statusInputValue || ''}
+          maxLength='40'
         />
         <button className="status-btn" onClick={statusUpdateHandler}>Update status</button>
       </form>
+      <div>
+        <p>My status: <span>{state.status || ''}</span></p>
+      </div>
       <hr />
       <div className='center'>
         <button style={{margin: '2rem 0'}} onClick={newPostHandler}>New post</button>
